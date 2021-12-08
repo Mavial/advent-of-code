@@ -2,8 +2,6 @@ import requests
 import os
 import copy
 
-from requests.api import request
-
 # Import file and data
 cookies = {"session": os.getenv("SESSION")}
 input = requests.get(
