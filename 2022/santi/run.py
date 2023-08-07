@@ -13,4 +13,6 @@ for name, obj in inspect.getmembers(mod):
         start_time = time.time()
         result = obj()
         time_elapsed = time.time() - start_time
-        print(f"Function '{name}' finished in --- {time_elapsed:.6f} seconds ---\n")
+        print(f"\033[32mFunction '\033[33m{name}\033[32m' finished in --- \033[36m{time_elapsed:.6f}\033[32m seconds ---\n\033[0mResult: {result}\n")
+
+

@@ -11,7 +11,7 @@ def part1():
     most_calories = 0
     for elf in data:
         if elf > most_calories: most_calories = elf
-    print(most_calories)
+    return most_calories
 
 """ PART 2 """
 def part2():
@@ -29,16 +29,16 @@ def part2():
                     top_calories[1] = elf
             else:
                 top_calories[0] = elf
-    print(sum(top_calories))
+    return sum(top_calories)
 
 """ PART 2 (Optimized) """
 def part2optimized():
     top_calories = []
     for elf in data:
         heapq.heappush(top_calories, elf)
-    print(sum(heapq.nlargest(3, top_calories)))
+    return sum(heapq.nlargest(3, top_calories))
 
 if __name__ == '__main__':
-    part1()
-    part2()
-    part2optimized()
+    print(part1())
+    print(part2())
+    print(part2optimized())

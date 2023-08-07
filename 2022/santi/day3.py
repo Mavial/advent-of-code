@@ -19,7 +19,7 @@ def part1():
                 else:
                     result += ord(char) - 38
 
-    print(result)
+    return result
 
 """ PART 2 """
 def part2():
@@ -36,9 +36,9 @@ def part2():
                 else:
                     result += ord(char) - 38
 
-    print(result)
+    return result
 
 
 if __name__ == '__main__':
-    part1()
-    part2()
+    print(part1())
+    print(part2())

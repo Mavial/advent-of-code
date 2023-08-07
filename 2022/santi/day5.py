@@ -41,9 +41,11 @@ def part1():
         for _ in range(move[0]):
             stacks[move[2] - 1].append(stacks[move[1] - 1].pop())
 
+    result = []
     for stack in stacks:
-        print(stack[-1], end="")
-    print("")
+        result.append(stack[-1])
+    return ''.join(result)
+
 
 
 """ PART 2 """
@@ -56,11 +58,13 @@ def part2():
         )
         stacks_list[move[1] - 1] = stacks_list[move[1] - 1][: -move[0]]
 
-    for list in stacks_list:
-        print(list[-1], end="")
-    print("")
+    result = []
+    for l in stacks_list:
+        result.append(l[-1])
+    return ''.join(result)
+
 
 
 if __name__ == '__main__':
-    part1()
-    part2()
+    print(part1())
+    print(part2())

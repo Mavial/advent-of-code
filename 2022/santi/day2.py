@@ -14,7 +14,7 @@ def part1():
         score += options[turn[1]] + 1
         score += result_matrix[options[turn[0]]][options[turn[1]]]
 
-    print(score)
+    return score
 
 """ PART  2 """
 def part2():
@@ -26,8 +26,8 @@ def part2():
         score += options[turn[1]]
         score += result_matrix[options[turn[0]]].index(options[turn[1]]) + 1
 
-    print(score)
+    return score
 
 if __name__ == '__main__':
-    part1()
-    part2()
+    print(part1())
+    print(part2())
