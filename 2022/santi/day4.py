@@ -9,25 +9,32 @@ data = [
 
 
 """ PART 1 """
-result = 0
-for line in data:
-    if (
-        line[0][0] <= line[1][0]
-        and line[0][1] >= line[1][1]
-        or line[0][0] >= line[1][0]
-        and line[0][1] <= line[1][1]
-    ):
-        result += 1
-print(result)
+def part1():
+    result = 0
+    for line in data:
+        if (
+            line[0][0] <= line[1][0]
+            and line[0][1] >= line[1][1]
+            or line[0][0] >= line[1][0]
+            and line[0][1] <= line[1][1]
+        ):
+            result += 1
+    print(result)
 
 """ PART 2 """
-result = 0
-for line in data:
-    if (
-        line[0][0] in range(line[1][0], line[1][1] + 1)
-        or line[0][1] in range(line[1][0], line[1][1] + 1)
-        or line[1][0] in range(line[0][0], line[0][1] + 1)
-        or line[1][1] in range(line[0][0], line[0][1] + 1)
-    ):
-        result += 1
-print(result)
+def part2():
+    result = 0
+    for line in data:
+        if (
+            line[0][0] in range(line[1][0], line[1][1] + 1)
+            or line[0][1] in range(line[1][0], line[1][1] + 1)
+            or line[1][0] in range(line[0][0], line[0][1] + 1)
+            or line[1][1] in range(line[0][0], line[0][1] + 1)
+        ):
+            result += 1
+    print(result)
+
+
+if __name__ == '__main__':
+    part1()
+    part2()

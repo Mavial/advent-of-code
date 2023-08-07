@@ -22,32 +22,45 @@ for line in raw_stacks[::-1].splitlines()[1:]:
         if crate != " ":
             stacks_list[i].append(crate)
 
-move_cleaner = lambda move: [
-    int(i)
-    for i in move.replace("move ", "")
-    .replace("from ", "")
-    .replace("to ", "")
-    .split(" ")
+moves = [
+    [
+        int(i)
+        for i in move.replace("move ", "")
+        .replace("from ", "")
+        .replace("to ", "")
+        .split(" ")
+    ]
+    for move in raw_moves.splitlines()
 ]
-moves = [move_cleaner(move) for move in raw_moves.splitlines()]
 
 """ PART 1 """
-for move in moves:
-    for _ in range(move[0]):
-        stacks[move[2] - 1].append(stacks[move[1] - 1].pop())
 
-for stack in stacks:
-    print(stack[-1], end="")
-print("")
+
+def part1():
+    for move in moves:
+        for _ in range(move[0]):
+            stacks[move[2] - 1].append(stacks[move[1] - 1].pop())
+
+    for stack in stacks:
+        print(stack[-1], end="")
+    print("")
 
 
 """ PART 2 """
-for move in moves:
-    stacks_list[move[2] - 1] = (
-        stacks_list[move[2] - 1] + stacks_list[move[1] - 1][-move[0] :]
-    )
-    stacks_list[move[1] - 1] = stacks_list[move[1] - 1][: -move[0]]
 
-for list in stacks_list:
-    print(list[-1], end="")
-print("")
+
+def part2():
+    for move in moves:
+        stacks_list[move[2] - 1] = (
+            stacks_list[move[2] - 1] + stacks_list[move[1] - 1][-move[0] :]
+        )
+        stacks_list[move[1] - 1] = stacks_list[move[1] - 1][: -move[0]]
+
+    for list in stacks_list:
+        print(list[-1], end="")
+    print("")
+
+
+if __name__ == '__main__':
+    part1()
+    part2()
