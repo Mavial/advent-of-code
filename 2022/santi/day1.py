@@ -1,7 +1,7 @@
 from data_loader import DataLoader
 import heapq
 
-data_loader = DataLoader(1)
+data_loader = DataLoader(day=1)
 
 data = [cals.split("\n") for cals in data_loader.load().split("\n\n")[:-1]]
 for l, _ in enumerate(data): data[l] = sum([int(i) for i in data[l]])
