@@ -1,45 +1,38 @@
-from collections import deque
+from typing import Tuple
 from data_loader import DataLoader
 
 data_loader = DataLoader(day=8)
 raw_data = data_loader.load()
 
 data = raw_data.splitlines()
-data = """30373
-25512
-65332
-33549
-35390""".splitlines()
-
-""" PART 1 """
 
 
-def visible_left(x, tree, line) -> bool:
-    for i in range(x + 1):
+def visible_left(x, tree, line) -> Tuple[bool, int]:
+    for i in range(x - 1, -1, -1):
         if int(tree) <= int(line[i]):
-            return False
-    return True
+            return False, x - i
+    return True, x
 
 
-def visible_right(x, tree, line) -> bool:
-    for i in range(x + 2, len(line)):
+def visible_right(x, tree, line) -> Tuple[bool, int]:
+    for i in range(x + 1, len(line)):
         if int(tree) <= int(line[i]):
-            return False
-    return True
+            return False, i - x
+    return True, len(range(x, len(line))) - 1
 
 
-def visible_top(x, y, tree) -> bool:
-    for i in range(y + 1):
-        if int(tree) <= int(data[i][x + 1]):
-            return False
-    return True
+def visible_top(x, y, tree) -> Tuple[bool, int]:
+    for i in range(y - 1, -1, -1):
+        if int(tree) <= int(data[i][x]):
+            return False, y - i
+    return True, y
 
 
-def visible_bottom(x, y, tree) -> bool:
-    for i in range(y + 2, len(data)):
-        if int(tree) <= int(data[i][x + 1]):
-            return False
-    return True
+def visible_bottom(x, y, tree) -> Tuple[bool, int]:
+    for i in range(y + 1, len(data)):
+        if int(tree) <= int(data[i][x]):
+            return False, i - (y + 1)
+    return True, len(range(y, len(data))) - 1
 
 
 def part1():
@@ -48,17 +41,30 @@ def part1():
     for y, line in enumerate(data[1:-1]):
         for x, tree in enumerate(line[1:-1]):
             if int(tree) != 0 and (
-                visible_left(x, tree, line)
-                or visible_right(x, tree, line)
-                or visible_top(x, y, tree)
-                or visible_bottom(x, y, tree)
+                visible_left(x + 1, tree, line)[0]
+                or visible_right(x + 1, tree, line)[0]
+                or visible_top(x + 1, y + 1, tree)[0]
+                or visible_bottom(x + 1, y + 1, tree)[0]
             ):
                 result += 1
 
     return result
 
+
 def part2():
-    pass
+    max_result = 0
+    for y, line in enumerate(data):
+        for x, tree in enumerate(line):
+            if int(tree) != 0:
+                view_dist_mult = (
+                    visible_top(x, y, tree)[1]
+                    * visible_left(x, tree, line)[1]
+                    * visible_bottom(x, y, tree)[1]
+                    * visible_right(x, tree, line)[1]
+                )
+                if view_dist_mult > max_result:
+                    max_result = view_dist_mult
+    return max_result
 
 
 if __name__ == "__main__":
