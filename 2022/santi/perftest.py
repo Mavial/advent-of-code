@@ -19,6 +19,6 @@ time_elapsed = time.time() - start_time
 
 minutes, sec = divmod(time_elapsed, 60)
 seconds, milliseconds = divmod(sec * 1000, 1000)
-print(f"\033[33mTotal time: {int(minutes):02}:{int(seconds):02}:{int(milliseconds):03}")
+print(f"\033[33mTotal time: {int(minutes):02}:{int(seconds):02}:{int(milliseconds):03}\033[0m")
 
 
