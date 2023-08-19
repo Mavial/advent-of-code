@@ -1,15 +1,21 @@
 from typing import List, Tuple, MutableSet, Generator
 from data_loader import DataLoader
 
-data_loader = DataLoader(day=9)
-raw_data = data_loader.load()
 
-data = tuple(
-    tuple(
-        result if idx != 1 else int(result) for idx, result in enumerate(r.split(" "))
+def load_data():
+    data_loader = DataLoader(day=9)
+    raw_data = data_loader.load()
+
+    return tuple(
+        tuple(
+            result if idx != 1 else int(result)
+            for idx, result in enumerate(r.split(" "))
+        )
+        for r in raw_data.splitlines()
     )
-    for r in raw_data.splitlines()
-)
+
+
+data = load_data()
 
 
 def move_head(
@@ -139,9 +145,6 @@ def tail_too_far(head: Tuple[int], tail: Tuple[int]) -> bool:
         return True
     else:
         return False
-
-
-""" PART 1 """
 
 
 def part1():

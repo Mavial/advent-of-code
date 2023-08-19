@@ -1,15 +1,19 @@
 from data_loader import DataLoader
 
-data_loader = DataLoader(day=3)
 
-data = data_loader.load().split("\n")
+def load_data():
+    data_loader = DataLoader(day=3)
+    return data_loader.load().split("\n")
 
-""" PART 1 """
+
+data = load_data()
+
+
 def part1():
     result = 0
     for rucksack in data:
         used_chars = []
-        f, b = rucksack[:len(rucksack) // 2], rucksack[len(rucksack) // 2:]
+        f, b = rucksack[: len(rucksack) // 2], rucksack[len(rucksack) // 2 :]
 
         for char in f:
             if char in b and char not in used_chars:
@@ -21,12 +25,12 @@ def part1():
 
     return result
 
-""" PART 2 """
+
 def part2():
     result = 0
     for rucksack in range(0, len(data), 3):
         used_chars = []
-        elf_group = data[rucksack:rucksack + 3]
+        elf_group = data[rucksack : rucksack + 3]
 
         for char in elf_group[0]:
             if char in elf_group[1] and char in elf_group[2] and char not in used_chars:
@@ -39,6 +43,6 @@ def part2():
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(part1())
     print(part2())

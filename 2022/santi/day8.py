@@ -2,15 +2,20 @@ from typing import Tuple
 from collections import deque
 from data_loader import DataLoader
 
-data_loader = DataLoader(day=8)
-raw_data = data_loader.load()
 
-data = tuple(int(i) for i in raw_data.replace("\n", ""))
-sorted_data = [deque() for _ in range(10)]
-ROW_LEN = 99
+def load_data():
+    data_loader = DataLoader(day=8)
+    raw_data = data_loader.load()
+
+    data = tuple(int(i) for i in raw_data.replace("\n", ""))
+    sorted_data = [deque() for _ in range(10)]
+    return data, sorted_data
+
+data, sorted_data = load_data()
 
 # delimiter to skip lower trees since they are less likely to be visible from far away
 MIN_TREE_SIZE = 0
+ROW_LEN = 99
 
 for i, val in enumerate(data):
     x = i % ROW_LEN

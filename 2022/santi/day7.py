@@ -3,10 +3,17 @@ from data_loader import DataLoader
 from typing import Optional, List, Deque
 
 
-# BUG ON LINE 841 OF THE PROVIDED DATA MUST BE MODIFIED BEFORE RUNNING
-# THERE IS ONE TOO MANY "cd .." WHICH LEADS TO A NULL POINTER ON LINE 95
-data_loader = DataLoader(day=7)
-data = data_loader.load().splitlines()
+def load_data():
+    data_loader = DataLoader(day=7)
+    data = data_loader.load(cache=False).splitlines()
+
+    # BUG ON LINE 841 OF THE PROVIDED DATA MUST BE MODIFIED BEFORE RUNNING
+    # THERE IS ONE TOO MANY "cd .." WHICH LEADS TO A NULL POINTER ON LINE 95
+    del data[840]
+    return data
+
+
+data = load_data()
 
 
 class File:
@@ -98,9 +105,6 @@ def build_filesystem() -> Directory:
     return root_dir
 
 
-""" PART 1 """
-
-
 def part1():
     result = 0
     root_dir: Directory = build_filesystem()
@@ -116,9 +120,6 @@ def part1():
             stack.extend(node_children)
 
     return result
-
-
-""" PART 2 """
 
 
 def part2():

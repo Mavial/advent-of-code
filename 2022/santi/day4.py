@@ -1,14 +1,18 @@
 from data_loader import DataLoader
 
-data_loader = DataLoader(day=4)
-raw_data = data_loader.load()
-data = [
-    [[int(i) for i in x.split("-")] for x in r.split(",")]
-    for r in raw_data.splitlines()
-]
+
+def load_data():
+    data_loader = DataLoader(day=4)
+    raw_data = data_loader.load()
+    return [
+        [[int(i) for i in x.split("-")] for x in r.split(",")]
+        for r in raw_data.splitlines()
+    ]
 
 
-""" PART 1 """
+data = load_data()
+
+
 def part1():
     result = 0
     for line in data:
@@ -21,7 +25,7 @@ def part1():
             result += 1
     return result
 
-""" PART 2 """
+
 def part2():
     result = 0
     for line in data:
@@ -35,6 +39,6 @@ def part2():
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(part1())
     print(part2())
