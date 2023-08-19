@@ -6,13 +6,14 @@ import inspect
 import time
 from timeit import timeit
 
-iterations = 10000
+iterations = 1000
 mod = importlib.import_module(sys.argv[1].strip(".py"))
+part_num = sys.argv[2] if len(sys.argv) == 3 else ""
 
 # Iterate through all functions and call them
 start_time = time.time()
 for name, obj in inspect.getmembers(mod):
-    if inspect.isfunction(obj) and "part" in name:
+    if inspect.isfunction(obj) and f"part{part_num}" in name:
         avg_time = timeit(obj, number=iterations)/iterations
         print(f"\033[32mAverage time for \033[33m{name}\033[32m --- \033[36m{avg_time}\033[32m seconds ---\n\n\033[0m")
 time_elapsed = time.time() - start_time
