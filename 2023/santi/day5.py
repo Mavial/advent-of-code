@@ -171,26 +171,48 @@ def split_ranges(seed_range, row) -> tuple[tuple, tuple]:
 
 
 def part2():
-    result = float("inf")
-    for i in range(0, len(seeds), 2):
-        seed_ranges = [tuple((seeds[i], seeds[i] + (seeds[i + 1] - 1)))]
-        for m in map_list:
-            modified_seed_ranges = []
-            for row in m:
-                new_seed_ranges = []
-                for seed_range in seed_ranges:
-                    modified_seeds, unmodified_seeds = split_ranges(seed_range, row)
-                    if len(unmodified_seeds) > 1:
-                        new_seed_ranges.extend(unmodified_seeds)
-                    elif len(unmodified_seeds) == 1:
-                        new_seed_ranges.append(unmodified_seeds[0])
-                    modified_seed_ranges.extend(modified_seeds)
-                seed_ranges = new_seed_ranges
-            seed_ranges.extend(modified_seed_ranges)
-        low_seed = min(tuple(zip(*seed_ranges))[0])
-        result = low_seed if low_seed < result else result
+    # Initialize the result with the maximum possible value
+    minimum_low_seed = float("inf")
 
-    return result
+    # Iterate over the seeds in pairs
+    for i in range(0, len(seeds), 2):
+        # Initialize seed_ranges with the current pair of seeds
+        seed_ranges = [(seeds[i], seeds[i] + (seeds[i + 1] - 1))]
+
+        # Process each map in the map_list
+        for map in map_list:
+            modified_seed_ranges = []
+
+            # Process each row in the current map
+            for row in map:
+                new_seed_ranges = []
+
+                # Process each seed range
+                for seed_range in seed_ranges:
+                    # Split the seed range based on the current row
+                    modified_seeds, unmodified_seeds = split_ranges(seed_range, row)
+
+                    # Add the unmodified seeds to new seed ranges
+                    if unmodified_seeds:
+                        new_seed_ranges.extend(unmodified_seeds)
+
+                    # Add the modified seeds to the modified seed ranges
+                    modified_seed_ranges.extend(modified_seeds)
+
+                # Update seed_ranges for the next iteration
+                seed_ranges = new_seed_ranges
+
+            # Extend seed_ranges with the modified seeds from this map
+            seed_ranges.extend(modified_seed_ranges)
+
+        # Find the lowest seed in the current seed ranges
+        low_seed = min(start for start, end in seed_ranges)
+
+        # Update the result if a new lower seed is found
+        minimum_low_seed = min(minimum_low_seed, low_seed)
+
+    return minimum_low_seed
+
 
 
 if __name__ == "__main__":
