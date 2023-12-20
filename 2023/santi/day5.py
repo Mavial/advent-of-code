@@ -4,39 +4,7 @@ from data_loader import DataLoader
 def load_data():
     data_loader = DataLoader(day=5, year=2023)
     raw_data = data_loader.load()
-    #     raw_data = """seeds: 79 14 55 13
 
-    # seed-to-soil map:
-    # 50 98 2
-    # 52 50 48
-
-    # soil-to-fertilizer map:
-    # 0 15 37
-    # 37 52 2
-    # 39 0 15
-
-    # fertilizer-to-water map:
-    # 49 53 8
-    # 0 11 42
-    # 42 0 7
-    # 57 7 4
-
-    # water-to-light map:
-    # 88 18 7
-    # 18 25 70
-
-    # light-to-temperature map:
-    # 45 77 23
-    # 81 45 19
-    # 68 64 13
-
-    # temperature-to-humidity map:
-    # 0 69 1
-    # 1 0 69
-
-    # humidity-to-location map:
-    # 60 56 37
-    # 56 93 4"""
     split_maps = raw_data.split("\n\n")
     seeds = split_maps[0].split(": ")[1].split(" ")
     parsed_maps = [
@@ -49,9 +17,8 @@ def load_data():
 seeds, maps = load_data()
 
 
-def part1(seeds=seeds):  # NOSONAR
-    result = 10**40
-    map_list: list[list[tuple[int, int, int]]] = []
+def parse_map(maps=maps) -> list[list[tuple[int, int, int]]]:
+    map_list = []
     for m in maps:
         row_list = []
         for row in m:
@@ -64,6 +31,14 @@ def part1(seeds=seeds):  # NOSONAR
                 (source_range_start, source_range_end, source_to_destination_offset)
             )
         map_list.append(row_list)
+    return map_list
+
+
+map_list = parse_map()
+
+
+def part1(seeds=seeds):  # NOSONAR
+    result = float("inf")
     for seed in seeds:
         for m in map_list:
             for row in m:
@@ -74,13 +49,147 @@ def part1(seeds=seeds):  # NOSONAR
     return result
 
 
+def split_ranges(seed_range, row) -> tuple[tuple, tuple]:
+    if seed_range[0] <= row[0] and seed_range[1] >= row[1]:  # seed range contains row
+        if seed_range[0] == row[0]:
+            return (
+                (
+                    tuple(
+                        (
+                            row[0] + row[2],
+                            row[1] + row[2],
+                        )
+                    ),
+                ),
+                (
+                    tuple(
+                        (
+                            row[1] + 1,
+                            seed_range[1],
+                        )
+                    ),
+                ),
+            )
+        elif seed_range[1] == row[1]:
+            return (
+                (
+                    tuple(
+                        (
+                            row[0] + row[2],
+                            row[1] + row[2],
+                        )
+                    ),
+                ),
+                (
+                    tuple(
+                        (
+                            seed_range[0],
+                            row[0] - 1,
+                        )
+                    ),
+                ),
+            )
+        else:
+            return (
+                (
+                    tuple(
+                        (
+                            row[0] + row[2],
+                            row[1] + row[2],
+                        )
+                    ),
+                ),
+                (
+                    tuple(
+                        (
+                            seed_range[0],
+                            row[0] - 1,
+                        )
+                    ),
+                    tuple(
+                        (
+                            row[1] + 1,
+                            seed_range[1],
+                        )
+                    ),
+                ),
+            )
+    elif seed_range[0] <= row[1] and seed_range[1] > row[1]:  # seed range starts in row
+        return (
+            (
+                tuple(
+                    (
+                        seed_range[0] + row[2],
+                        row[1] + row[2],
+                    )
+                ),
+            ),
+            (
+                tuple(
+                    (
+                        row[1] + 1,
+                        seed_range[1],
+                    )
+                ),
+            ),
+        )
+    elif seed_range[0] < row[0] and seed_range[1] >= row[0]:  # seed range ends in row
+        return (
+            (
+                tuple(
+                    (
+                        row[0] + row[2],
+                        seed_range[1] + row[2],
+                    ),
+                ),
+            ),
+            (
+                tuple(
+                    (
+                        seed_range[0],
+                        row[0] - 1,
+                    )
+                ),
+            ),
+        )
+    elif (
+        seed_range[0] >= row[0] and seed_range[1] <= row[1]
+    ):  # seed range is contained in row
+        return (
+            (
+                tuple(
+                    (
+                        seed_range[0] + row[2],
+                        seed_range[1] + row[2],
+                    )
+                ),
+            ),
+            tuple(),
+        )
+    else:
+        return tuple(), tuple((seed_range,))
+
+
 def part2():
-    result = 10**40
+    result = float("inf")
     for i in range(0, len(seeds), 2):
-        print(str((i / len(seeds)) * 100) + "%")
-        r = part1(range(seeds[i], seeds[i] + (seeds[i + 1] - 1)))
-        if r < result:
-            result = r
+        seed_ranges = [tuple((seeds[i], seeds[i] + (seeds[i + 1] - 1)))]
+        for m in map_list:
+            modified_seed_ranges = []
+            for row in m:
+                new_seed_ranges = []
+                for seed_range in seed_ranges:
+                    modified_seeds, unmodified_seeds = split_ranges(seed_range, row)
+                    if len(unmodified_seeds) > 1:
+                        new_seed_ranges.extend(unmodified_seeds)
+                    elif len(unmodified_seeds) == 1:
+                        new_seed_ranges.append(unmodified_seeds[0])
+                    modified_seed_ranges.extend(modified_seeds)
+                seed_ranges = new_seed_ranges
+            seed_ranges.extend(modified_seed_ranges)
+        low_seed = min(tuple(zip(*seed_ranges))[0])
+        result = low_seed if low_seed < result else result
+
     return result
 
 
