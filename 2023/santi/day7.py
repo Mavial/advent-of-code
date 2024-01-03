@@ -1,4 +1,3 @@
-from math import prod
 from data_loader import DataLoader
 
 
